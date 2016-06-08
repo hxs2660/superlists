@@ -38,7 +38,7 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys('Buy peacock feathers')
         inputbox.send_keys(Keys.ENTER)
         time.sleep(3)
-        #edith获得了他的唯一URL       
+        #edith获得了他的唯一URL 
         edith_list_url=self.browser.current_url
         self.assertRegex(edith_list_url,'/lists/.+')        
         self.check_for_row_in_list_table('1:Buy peacock feathers')
@@ -71,8 +71,6 @@ class NewVisitorTest(LiveServerTestCase):
         francis_list_url=self.browser.current_url
         self.assertRegex(francis_list_url,'/lists/.+')
         self.assertNotEqual(francis_list_url,edith_list_url)
-
-        print(francis_list_url,edith_list_url,sep=',')
 
         #self.fail('Finish the test!')
     
