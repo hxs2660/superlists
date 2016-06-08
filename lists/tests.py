@@ -6,17 +6,18 @@ from django.template.loader import render_to_string
 from lists.models import Item
 
 class HomePageTest(TestCase):
+    #测试主页解析
     def test_root_url_resolve_to_home_page_view(self):
         found=resolve('/')
         self.assertEqual(found.func,home_page)
-    
+    #返回正确首页
     def test_home_page_returns_correct_html(self):
         request=HttpRequest()
         response=home_page(request)
         expected_html=render_to_string('home.html')
         #print(expected_html)
         self.assertEqual(response.content.decode(),expected_html)
-
+    #测试保存POST请求    
     def test_home_page_can_save_a_POST_request(self):
         request=HttpRequest()
         request.method='POST'
@@ -26,7 +27,7 @@ class HomePageTest(TestCase):
         self.assertEqual(Item.objects.count(),1)
         new_item=Item.objects.first()
         self.assertEqual(new_item.text,'A new list item')
-
+    #POST之后重定向    
     def test_home_page_redirects_after_POST(self):
         request=HttpRequest()
         request.method='POST'
@@ -34,20 +35,11 @@ class HomePageTest(TestCase):
 
         response=home_page(request)
         self.assertEqual(response.status_code,302)
-        self.assertEqual(response['location'],'/')
-
-    def test_home_page_displays_all_list_items(self):
-        Item.objects.create(text='itemey 1')
-        Item.objects.create(text='itemey 2')
-
-        request=HttpRequest()
-        response=home_page(request)
-
-        self.assertIn('itemey 1',response.content.decode())
-        self.assertIn('itemey 2',response.content.decode())
-
+        self.assertEqual(response['location'],'/lists/the-only-list-in-the-world/')
+       
 
 class ItemModelTest(TestCase):
+    #保存、读出
     def test_saving_and_retrieving_items(self):
         first_item=Item()
         first_item.text='The first (ever) list item'
@@ -64,3 +56,18 @@ class ItemModelTest(TestCase):
         second_saved_item=saved_items[1]
         self.assertEqual(first_saved_item.text,'The first (ever) list item')
         self.assertEqual(second_saved_item.text,'Item the second')
+
+class ListViewTest(TestCase):
+    #测试使用模版
+    def test_uses_list_Template(self):
+        response=self.client.get('/lists/the-only-list-in-the-world/')
+        self.assertTemplateUsed(response,'list.html')
+
+    #主页显示所有清单 
+    def test_displays_all_items(self):
+        Item.objects.create(text='itemey 1')
+        Item.objects.create(text='itemey 2')
+        
+        response=self.client.get('/lists/the-only-list-in-the-world/')
+        self.assertContains(response,'itemey 1')
+        self.assertContains(response,'itemey 2')
