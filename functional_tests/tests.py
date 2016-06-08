@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-#codeing:utf-8
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-#import unittest
 import time
-from django.test import LiveServerTestCase
+#from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
     """docstring for NewVisittorTest"""
     #测试之前运行
     def setUp(self):
@@ -22,6 +21,21 @@ class NewVisitorTest(LiveServerTestCase):
         table=self.browser.find_element_by_id('id_list_table')    
         rows=table.find_elements_by_tag_name('tr')
         self.assertIn(row_text,[row.text for row in rows])
+
+    def test_layout_and_styling(self):
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024,768)
+        inputbox=self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x']+inputbox.size['width']/2,512,delta=5
+            )
+        inputbox.send_keys('testing\n')
+        time.sleep(3)
+        inputbox=self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x']+inputbox.size['width']/2,512,delta=5
+            )
+       
 
     #测试方法    
     def test_can_start_a_list_and_retrieve_it_later(self):
