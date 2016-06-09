@@ -45,7 +45,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
             inputbox.location['x']+inputbox.size['width']/2,512,delta=5
             )
         inputbox.send_keys('testing\n')
-        time.sleep(1)
+        time.sleep(3)
         inputbox=self.browser.find_element_by_id('id_new_item')
         self.assertAlmostEqual(
             inputbox.location['x']+inputbox.size['width']/2,512,delta=5
@@ -66,7 +66,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         #edith输入了一个新待办事项，新建了一个清单
         inputbox.send_keys('Buy peacock feathers')
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
+        time.sleep(3)
         #edith获得了他的唯一URL 
         edith_list_url=self.browser.current_url
         self.assertRegex(edith_list_url,'/lists/.+')        
@@ -75,7 +75,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         inputbox=self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Use peacock feathers to make a fly')
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
+        time.sleep(3)
         #检查两次输入清单是否已经保存
         self.check_for_row_in_list_table('1:Buy peacock feathers')
         self.check_for_row_in_list_table('2:Use peacock feathers to make a fly')
@@ -94,7 +94,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         inputbox=self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Buy milk')
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
+        time.sleep(3)
 
         #francis获得了他的唯一URL
         francis_list_url=self.browser.current_url
