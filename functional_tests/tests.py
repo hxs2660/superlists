@@ -24,7 +24,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
     #测试之前运行
     def setUp(self):
         #self.browser=webdriver.Firefox()
-        self.browser=webdriver.PhantomJS(executable_path='../phantomjs')
+        self.browser=webdriver.PhantomJS(executable_path='/opt/phantomjs')
         self.browser.implicitly_wait(3)
 
 
